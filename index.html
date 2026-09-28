@@ -1,161 +1,108 @@
 <!doctype html>
 <html lang="pt-BR">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>Super Admin — Cardápio TrampoAC</title>
-  <link rel="icon" href="./favicon.ico">
-  <link rel="stylesheet" href="./super-admin.css">
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow,noarchive"><meta name="theme-color" content="#090b10">
+<title>SuperAdmin GOD — Império do Açaí</title>
+<link rel="icon" href="./favicon.ico"><link rel="stylesheet" href="./super-admin.css?v=2">
 </head>
 <body>
-  <div class="app-shell">
-    <header class="topbar">
-      <div>
-        <p class="eyebrow">CARDÁPIO TRAMPOAC</p>
-        <h1>Super Admin</h1>
+<section id="loginGate" class="login-gate">
+  <div class="login-panel">
+    <div class="god-mark">GOD</div>
+    <p class="eyebrow">IMPÉRIO DO AÇAÍ</p><h1>SuperAdmin</h1>
+    <p class="muted">Controle total deste estabelecimento.</p>
+    <input id="adminPassword" class="login-input" type="password" autocomplete="current-password" placeholder="Senha administrativa">
+    <button id="loginBtn" class="primary login-btn">Entrar</button>
+    <p id="loginStatus" class="status"></p>
+  </div>
+</section>
+
+<section id="adminApp" hidden>
+<header class="topbar">
+  <div><p class="eyebrow">SUPERADMIN GOD</p><h1>Império do Açaí</h1></div>
+  <div class="top-actions"><span id="storeBadge" class="badge">—</span><button id="logoutBtn" class="ghost">Sair</button></div>
+</header>
+<div class="shell">
+  <aside class="sidebar">
+    <button class="tab active" data-view="dashboard">Visão geral</button>
+    <button class="tab" data-view="store">Estabelecimento</button>
+    <button class="tab" data-view="products">Produtos</button>
+    <button class="tab" data-view="orders">Pedidos</button>
+    <button class="tab" data-view="team">Equipe</button>
+    <button class="tab" data-view="owner">Proprietário</button>
+    <button class="tab danger-tab" data-view="danger">Zona GOD</button>
+  </aside>
+  <main class="main">
+    <section id="view-dashboard" class="view active">
+      <div class="section-head"><div><p class="eyebrow">CONTROLE TOTAL</p><h2>Visão geral</h2></div><button id="refreshBtn" class="ghost">Atualizar</button></div>
+      <div class="metrics">
+        <div class="metric"><span>Produtos</span><strong id="mProducts">—</strong></div>
+        <div class="metric"><span>Pedidos</span><strong id="mOrders">—</strong></div>
+        <div class="metric"><span>Equipe</span><strong id="mTeam">—</strong></div>
+        <div class="metric"><span>Faturamento</span><strong id="mRevenue">—</strong></div>
       </div>
-      <div class="top-actions">
-        <span id="adminIdentity" class="muted"></span>
-        <button id="logoutBtn" class="ghost" hidden>Sair</button>
+      <div class="panel"><h3>Resumo da loja</h3><div id="storeSummary" class="summary-grid"></div></div>
+    </section>
+
+    <section id="view-store" class="view">
+      <div class="section-head"><div><p class="eyebrow">CONFIGURAÇÃO</p><h2>Estabelecimento</h2></div></div>
+      <div class="panel form-grid">
+        <label>Nome<input id="storeNome"></label><label>Slug<input id="storeSlug"></label>
+        <label>Telefone<input id="storeTelefone"></label><label>WhatsApp<input id="storeWhatsapp"></label>
+        <label>Instagram<input id="storeInstagram"></label><label>E-mail de contato<input id="storeEmail"></label>
+        <label class="full">Endereço<input id="storeEndereco"></label><label>Fuso<input id="storeFuso"></label>
+        <label>Status<select id="storeAtivo"><option value="true">Ativo</option><option value="false">Desativado</option></select></label>
+        <div class="full actions"><button id="saveStoreBtn" class="primary">Salvar alterações</button></div>
       </div>
-    </header>
+    </section>
 
-    <main>
-      <section id="loginGate" class="panel login-panel">
-        <h2>Acesso administrativo</h2>
-        <p>Digite a senha temporária do Super Admin.</p>
-        <label class="login-label" for="adminPassword">Senha</label>
-        <input id="adminPassword" class="login-input" type="password" autocomplete="current-password" placeholder="Digite a senha">
-        <button id="loginBtn" class="primary login-btn" type="button">Entrar</button>
-        <p id="loginStatus" class="status"></p>
-        <div class="notice">Modo de teste: a senha é validada no servidor e não fica gravada neste arquivo. A sessão expira automaticamente.</div>
-      </section>
+    <section id="view-products" class="view">
+      <div class="section-head"><div><p class="eyebrow">CARDÁPIO</p><h2>Produtos</h2></div><input id="productSearch" class="search" placeholder="Buscar produto"></div>
+      <div id="productsList" class="cards"></div>
+    </section>
 
-      <section id="deniedGate" class="panel login-panel" hidden>
-        <h2>Sessão expirada</h2>
-        <p>Sua sessão administrativa expirou ou ficou inválida.</p>
-        <button id="backToLoginBtn" class="primary">Entrar novamente</button>
-      </section>
+    <section id="view-orders" class="view">
+      <div class="section-head"><div><p class="eyebrow">OPERAÇÃO</p><h2>Pedidos</h2></div><button id="reloadOrdersBtn" class="ghost">Recarregar</button></div>
+      <div id="ordersList" class="table-wrap"></div>
+    </section>
 
-      <section id="adminApp" hidden>
-        <div class="metrics" id="metrics"></div>
+    <section id="view-team" class="view">
+      <div class="section-head"><div><p class="eyebrow">ACESSOS</p><h2>Equipe</h2></div></div>
+      <div id="teamList" class="cards"></div>
+    </section>
 
-        <nav class="tabs" aria-label="Áreas do painel">
-          <button class="tab active" data-view="estabelecimentos">Estabelecimentos</button>
-          <button class="tab" data-view="usuarios">Cadastros / usuários</button>
-          <button class="tab" data-view="transferencias">Transferências</button>
-          <button class="tab" data-view="sistema">Sistema</button>
-        </nav>
-
-        <section class="view active" id="view-estabelecimentos">
-          <div class="section-head">
-            <div><h2>Estabelecimentos</h2><p>Visualize ou abra o cardápio como cliente, ative/desative, transfira para outra conta ou exclua permanentemente.</p></div>
-            <div class="search-row"><input id="storeSearch" placeholder="Buscar nome, slug ou e-mail"><button id="storeSearchBtn">Buscar</button></div>
-          </div>
-          <div id="storesTable" class="table-wrap"></div>
-        </section>
-
-        <section class="view" id="view-usuarios">
-          <div class="section-head">
-            <div><h2>Cadastros / usuários</h2><p>Contas que já entraram no sistema.</p></div>
-            <div class="search-row"><input id="userSearch" placeholder="Buscar e-mail"><button id="userSearchBtn">Buscar</button></div>
-          </div>
-          <div id="usersTable" class="table-wrap"></div>
-        </section>
-
-        <section class="view" id="view-transferencias">
-          <div class="section-head"><div><h2>Transferências</h2><p>Histórico e transferências que aguardam o novo e-mail entrar pela primeira vez.</p></div></div>
-          <div id="transfersTable" class="table-wrap"></div>
-        </section>
-
-        <section class="view" id="view-sistema">
-          <div class="section-head">
-            <div><h2>Atualização global do sistema</h2><p>Força os dispositivos conectados a abandonar arquivos antigos e carregar a versão mais recente.</p></div>
-            <button class="ghost" type="button" onclick="loadSystemStatus()">Atualizar status</button>
-          </div>
-          <div class="system-status-grid">
-            <article class="system-status-card"><span>Versão atual</span><strong id="systemCacheVersion">—</strong></article>
-            <article class="system-status-card"><span>Reset de emergência</span><strong id="systemEmergencyVersion">—</strong></article>
-            <article class="system-status-card system-status-wide"><span>Última alteração</span><strong id="systemUpdatedAt">—</strong><small id="systemLastAction">—</small></article>
-          </div>
-          <div class="system-control-grid">
-            <article class="system-control-card">
-              <div><span class="system-kicker">USO NORMAL</span><h3>Forçar atualização global</h3><p>Todos os dispositivos que já possuem o controle global recebem a nova versão em tempo real e recarregam <code>app.js</code> e <code>style.css</code> com um novo identificador de cache.</p></div>
-              <button class="primary system-main-action" type="button" id="forceUpdateBtn" onclick="forceGlobalUpdate()">⚡ Forçar atualização em todos</button>
-            </article>
-            <article class="system-control-card emergency">
-              <div><span class="system-kicker danger-kicker">EMERGÊNCIA</span><h3>Reset completo de cache</h3><p>Além de gerar uma nova versão, manda os dispositivos limpar Cache Storage, remover Service Workers antigos e recarregar a aplicação.</p></div>
-              <button class="danger system-main-action" type="button" id="emergencyResetBtn" onclick="emergencyGlobalReset()">Reset de emergência</button>
-            </article>
-          </div>
-          <div class="notice system-note"><strong>Importante:</strong> navegadores que estiverem offline recebem a atualização assim que voltarem a abrir o site. Este recurso não apaga login, pedidos ou dados do cliente.</div>
-          <div class="status" id="systemActionStatus"></div>
-        </section>
-      </section>
-    </main>
-  </div>
-
-  <div id="transferModal" class="modal-backdrop" hidden>
-    <div class="modal">
-      <button id="closeTransferModal" class="modal-close" aria-label="Fechar">×</button>
-      <p class="eyebrow">TRANSFERIR CARDÁPIO</p>
-      <h2 id="transferTitle">Transferir estabelecimento</h2>
-      <p class="muted">O proprietário atual perderá o acesso a este estabelecimento. Produtos, pedidos e configurações permanecem no mesmo cardápio.</p>
-      <label>Novo e-mail</label>
-      <input id="transferEmail" type="email" placeholder="cliente@gmail.com" autocomplete="email">
-      <div class="notice">Se o e-mail já entrou no sistema, a troca é imediata. Caso ainda não tenha entrado, a transferência fica pendente e é concluída automaticamente no primeiro login dele.</div>
-      <div class="modal-actions">
-        <button id="confirmTransferBtn" class="danger">Confirmar transferência</button>
-        <button id="cancelTransferBtn" class="ghost">Cancelar</button>
+    <section id="view-owner" class="view">
+      <div class="section-head"><div><p class="eyebrow">SUPABASE AUTH</p><h2>Proprietário</h2></div></div>
+      <div id="ownerInfo" class="panel"></div>
+      <div class="panel form-grid">
+        <label class="full">Novo e-mail<input id="ownerEmail" type="email"></label>
+        <label class="full">Nova senha<input id="ownerPassword" type="password" placeholder="mínimo 10 caracteres"></label>
+        <div class="full actions wrap">
+          <button id="ownerEmailBtn" class="primary">Alterar e-mail</button>
+          <button id="ownerPasswordBtn" class="primary">Trocar senha</button>
+          <button id="ownerRecoveryBtn" class="ghost">Enviar redefinição</button>
+          <button id="ownerBanBtn" class="danger">Bloquear</button>
+          <button id="ownerUnbanBtn" class="success">Desbloquear</button>
+        </div>
       </div>
-      <p id="transferStatus" class="status"></p>
-    </div>
-  </div>
+    </section>
 
-
-  <div id="menuModal" class="modal-backdrop" hidden>
-    <div class="modal menu-modal">
-      <button id="closeMenuModal" class="modal-close" aria-label="Fechar">×</button>
-      <p class="eyebrow">VISÃO ADMINISTRATIVA DO CARDÁPIO</p>
-      <h2 id="menuTitle">Cardápio</h2>
-      <div id="menuMeta" class="menu-meta muted"></div>
-      <div id="menuBody" class="menu-body"></div>
-    </div>
-  </div>
-
-
-
-  <div id="userGodModal" class="modal-backdrop" hidden>
-    <div class="modal god-modal">
-      <button id="closeUserGodModal" class="modal-close" aria-label="Fechar">×</button>
-      <p class="eyebrow">CONTROLE TOTAL DE USUÁRIO</p>
-      <h2 id="userGodTitle">Ações GOD</h2>
-      <p class="muted">ID: <span id="userGodId"></span></p>
-      <label>E-mail de autenticação</label><input id="godUserEmail" type="email">
-      <div class="inline-actions"><button id="saveUserEmailBtn" class="ghost">Alterar e-mail</button></div>
-      <label>Nova senha direta</label><input id="godUserPassword" type="password" minlength="10" placeholder="Mínimo 10 caracteres">
-      <div class="inline-actions"><button id="saveUserPasswordBtn" class="primary">Trocar senha</button><button id="toggleUserBlockBtn" class="ghost">Bloquear usuário</button></div>
-      <div class="god-danger-zone"><strong>Zona de risco</strong><p>Excluir remove a conta do Supabase Auth. Estabelecimentos pertencentes ao usuário devem ser transferidos ou tratados pelo backend.</p><button id="deleteUserBtn" class="danger">Excluir usuário do Auth</button></div>
-      <div class="modal-actions"><button id="cancelUserGodBtn" class="ghost">Fechar</button></div>
-      <p id="userGodStatus" class="status"></p>
-    </div>
-  </div>
-
-  <div id="storeGodModal" class="modal-backdrop" hidden>
-    <div class="modal god-modal">
-      <button id="closeStoreGodModal" class="modal-close" aria-label="Fechar">×</button>
-      <p class="eyebrow">EDITAR ESTABELECIMENTO</p><h2 id="storeGodTitle">Editar estabelecimento</h2>
-      <div class="god-form-grid">
-        <div><label>Nome</label><input id="godStoreName"></div><div><label>Slug</label><input id="godStoreSlug"></div>
-        <div><label>Telefone</label><input id="godStorePhone"></div><div><label>WhatsApp</label><input id="godStoreWhatsapp"></div>
-        <div><label>Instagram</label><input id="godStoreInstagram"></div><div><label>E-mail de contato</label><input id="godStoreEmail" type="email"></div>
-        <div class="full"><label>Endereço</label><input id="godStoreAddress"></div><div class="full"><label>Proprietário atual</label><input id="godStoreOwner" readonly></div>
+    <section id="view-danger" class="view">
+      <div class="section-head"><div><p class="eyebrow danger-text">AÇÕES IRREVERSÍVEIS</p><h2>Zona GOD</h2></div></div>
+      <div class="danger-zone">
+        <h3>Poder total do Império</h3><p>Estas ações são restritas ao estabelecimento Império do Açaí.</p>
+        <div class="actions wrap">
+          <button id="disableStoreBtn" class="danger">Desativar loja</button>
+          <button id="enableStoreBtn" class="success">Reativar loja</button>
+          <button id="deleteOwnerBtn" class="danger">Excluir usuário proprietário</button>
+          <button id="deleteStoreBtn" class="danger heavy">Excluir estabelecimento</button>
+        </div>
       </div>
-      <div class="modal-actions"><button id="saveStoreGodBtn" class="primary">Salvar alterações</button><button id="cancelStoreGodBtn" class="ghost">Cancelar</button></div><p id="storeGodStatus" class="status"></p>
-    </div>
-  </div>
-
-  <div id="toast" class="toast" aria-live="polite"></div>
-  <script src="./super-admin.js"></script>
-</body>
-</html>
+    </section>
+  </main>
+</div>
+</section>
+<div id="toast" class="toast"></div>
+<script src="./super-admin.js?v=2"></script>
+</body></html>
