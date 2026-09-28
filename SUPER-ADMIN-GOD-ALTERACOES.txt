@@ -1,0 +1,58 @@
+SUPER ADMIN GOD — ALTERAÇÕES DE ALTO PRIVILÉGIO
+
+O projeto recebido já tinha:
+- login temporário validado no servidor
+- resumo global
+- listar usuários e estabelecimentos
+- ativar/desativar loja
+- ver/abrir cardápio
+- transferir loja
+- excluir loja e dados vinculados
+- forçar atualização global / reset de emergência
+
+Adicionado nesta versão:
+1. AÇÕES GOD EM USUÁRIOS
+   - trocar senha diretamente no Supabase Auth
+   - alterar e-mail de autenticação
+   - enviar redefinição de senha
+   - bloquear usuário
+   - desbloquear usuário
+   - excluir usuário do Auth
+   - exclusão forçada pode deixar lojas sem proprietário em vez de apagar as lojas
+
+2. AÇÕES GOD EM ESTABELECIMENTOS
+   - editar nome
+   - editar slug
+   - editar telefone
+   - editar WhatsApp
+   - editar Instagram
+   - editar e-mail de contato
+   - editar endereço
+   - continua podendo ativar/desativar, transferir e excluir
+
+3. AÇÕES GOD NO CARDÁPIO
+   - ativar/desativar qualquer produto diretamente na visualização administrativa
+   - excluir produto permanentemente
+   - exclusão tenta remover dependências conhecidas (variações, vínculos de opções, imagens e detalhes comerciais)
+
+4. AUDITORIA
+   - as novas ações escrevem em public.super_admin_logs
+
+SEGURANÇA
+- Nenhuma service_role key foi colocada no HTML/JS do navegador.
+- As ações de Auth e escrita global ficam na Edge Function:
+  supabase/functions/super-admin-god/index.ts
+- A Edge Function valida o mesmo token temporário já usado pelo seu super-admin chamando super-admin-api com action=ping.
+- Depois da validação ela usa SUPABASE_SERVICE_ROLE_KEY somente no servidor.
+- Ações destrutivas no navegador exigem confirmação textual.
+
+PARA FUNCIONAR
+- O frontend já aponta para:
+  https://xzhxqjgekqbyucdgtvra.supabase.co/functions/v1/super-admin-god
+- Portanto é necessário publicar a nova Edge Function no mesmo projeto Supabase.
+- O código da função já está incluído nesta pasta.
+
+ATENÇÃO
+- O ZIP recebido não continha o código-fonte das Edge Functions antigas super-admin-api,
+  super-admin-extra e super-admin-system. Elas foram preservadas exatamente como estavam sendo usadas.
+- Esta versão não modifica nem substitui essas funções antigas.

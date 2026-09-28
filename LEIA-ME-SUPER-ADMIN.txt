@@ -1,0 +1,22 @@
+SUPER ADMIN — Cardápio TrampoAC
+
+Arquivos prontos para publicar na raiz do repositório Vercel.
+
+Recursos:
+- login temporário por senha validada no servidor
+- resumo geral
+- listar usuários e estabelecimentos
+- ativar/desativar estabelecimentos
+- visualizar o cardápio completo de qualquer estabelecimento dentro do Super Admin
+- abrir o cardápio público do cliente em nova aba (cardapio.trampoac.com/?loja=slug)
+- transferir cardápio entre contas
+- excluir permanentemente um estabelecimento e seus dados vinculados no banco
+
+ATENÇÃO: o botão Excluir é permanente. Ele não apaga a conta Google/Auth do proprietário.
+
+
+ATUALIZAÇÃO GLOBAL DE CACHE
+- Aba Sistema mostra a versão global atual.
+- Forçar atualização incrementa a versão e recarrega dispositivos conectados.
+- Reset de emergência também limpa Cache Storage e remove Service Workers antigos nos dispositivos compatíveis.
+- Backend: Edge Function super-admin-system + public.system_config.
